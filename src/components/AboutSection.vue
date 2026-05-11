@@ -5,84 +5,64 @@
         <!-- Left: Text -->
         <div class="reveal-left">
           <span class="inline-block bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-            Biz Haqimizda
+            {{ t('about.badge') }}
           </span>
           <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Texnologiya orqali
-            <span class="gradient-text"> biznesingizni</span>
-            o'stiramiz
+            {{ t('about.title1') }}
+            <span class="gradient-text"> {{ t('about.title2') }}</span>
+            {{ t('about.title3') }}
           </h2>
-          <p class="text-lg text-gray-600 leading-relaxed mb-6">
-            SaharSoft — 2019-yilda tashkil etilgan, O'zbekistondagi yetakchi IT kompaniyalardan biri.
-            Biz mijozlarimizga nafaqat kod yozamiz — ularning biznesini raqamli dunyoda muvaffaqiyatli
-            bo'lishiga ko'maklashamiz.
-          </p>
-          <p class="text-lg text-gray-600 leading-relaxed mb-8">
-            Tajribali dasturchilar, dizaynerlar va loyiha menejerlaridan iborat jamoamiz
-            har bir loyihaga alohida e'tibor bilan yondashadi.
-          </p>
+          <p class="text-lg text-gray-600 leading-relaxed mb-6">{{ t('about.p1') }}</p>
+          <p class="text-lg text-gray-600 leading-relaxed mb-8">{{ t('about.p2') }}</p>
 
-          <!-- Checkmarks -->
           <ul class="space-y-3 mb-10">
-            <li v-for="item in advantages" :key="item" class="flex items-center gap-3">
+            <li v-for="(item, i) in 4" :key="i" class="flex items-center gap-3">
               <div class="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <svg class="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span class="text-gray-700 font-medium">{{ item }}</span>
+              <span class="text-gray-700 font-medium">{{ t(`about.advantages[${i}]`) }}</span>
             </li>
           </ul>
 
           <a href="#contact" class="btn-primary text-base px-8 py-4">
-            Hamkorlik boshlash
+            {{ t('about.cta') }}
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
         </div>
 
-        <!-- Right: Stats cards -->
+        <!-- Right: Stats -->
         <div class="reveal-right">
           <div class="grid grid-cols-2 gap-6">
             <div
               v-for="(stat, i) in stats"
-              :key="stat.label"
+              :key="i"
               class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-hover text-center"
               :class="i === 0 ? 'col-span-2 bg-gradient-to-br from-primary-600 to-blue-500 text-white' : ''"
             >
-              <div
-                class="text-5xl font-extrabold mb-2"
-                :class="i === 0 ? 'text-white' : 'gradient-text'"
-              >
+              <div class="text-5xl font-extrabold mb-2" :class="i === 0 ? 'text-white' : 'gradient-text'">
                 {{ stat.value }}
               </div>
-              <div
-                class="font-semibold text-lg mb-1"
-                :class="i === 0 ? 'text-white/90' : 'text-gray-800'"
-              >
-                {{ stat.label }}
+              <div class="font-semibold text-lg mb-1" :class="i === 0 ? 'text-white/90' : 'text-gray-800'">
+                {{ t(`about.stats[${i}].label`) }}
               </div>
-              <div
-                class="text-sm"
-                :class="i === 0 ? 'text-white/70' : 'text-gray-500'"
-              >
-                {{ stat.sublabel }}
+              <div class="text-sm" :class="i === 0 ? 'text-white/70' : 'text-gray-500'">
+                {{ t(`about.stats[${i}].sublabel`) }}
               </div>
             </div>
           </div>
 
-          <!-- Tech logos -->
           <div class="mt-6 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <div class="text-sm font-semibold text-gray-500 text-center mb-4">Ishlatadigan texnologiyalar</div>
+            <div class="text-sm font-semibold text-gray-500 text-center mb-4">{{ t('about.tech_title') }}</div>
             <div class="flex flex-wrap justify-center gap-3">
               <span
                 v-for="tech in techs"
                 :key="tech"
                 class="px-3 py-1.5 bg-gray-100 hover:bg-primary-100 hover:text-primary-700 text-gray-600 rounded-lg text-sm font-medium transition-colors duration-200"
-              >
-                {{ tech }}
-              </span>
+              >{{ tech }}</span>
             </div>
           </div>
         </div>
@@ -92,18 +72,14 @@
 </template>
 
 <script setup>
-const advantages = [
-  'Muddatda va sifatli yetkazib berish kafolati',
-  'Loyiha davomida doimiy aloqa va shaffoflik',
-  'Post-launch texnik qo\'llab-quvvatlash',
-  'Xavfsizlik va ma\'lumotlar maxfiyligi ustuvorligi',
-]
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const stats = [
-  { value: '5+', label: 'Yillik tajriba', sublabel: '2019-yildan beri bozorda' },
-  { value: '150+', label: 'Bajarilgan loyihalar', sublabel: '10+ soha bo\'yicha' },
-  { value: '80+', label: 'Mamnun mijozlar', sublabel: 'Mahalliy va xalqaro' },
-  { value: '25+', label: 'Mutaxassis jamoa', sublabel: 'Turli soha ekspertlari' },
+  { value: '5+' },
+  { value: '150+' },
+  { value: '80+' },
+  { value: '25+' },
 ]
 
 const techs = [

@@ -15,48 +15,114 @@
 
         <!-- Desktop Nav -->
         <ul class="hidden md:flex items-center gap-8">
-          <li v-for="link in navLinks" :key="link.href">
+          <li v-for="link in navLinks" :key="link.key">
             <a
               :href="link.href"
               class="text-gray-600 hover:text-primary-600 font-medium transition-colors duration-200 relative group"
             >
-              {{ link.label }}
+              {{ t(`nav.${link.key}`) }}
               <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300 group-hover:w-full"></span>
             </a>
           </li>
         </ul>
 
-        <!-- CTA Button -->
-        <div class="hidden md:flex items-center gap-4">
+        <!-- Right side: Lang switcher + CTA -->
+        <div class="hidden md:flex items-center gap-3">
+          <!-- Language switcher -->
+          <div class="relative" ref="langDropdownRef">
+            <button
+              class="flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all duration-200 text-sm font-semibold text-gray-700"
+              @click="langOpen = !langOpen"
+            >
+              <span class="text-base leading-none">{{ currentLang.flag }}</span>
+              <span>{{ currentLang.code.toUpperCase() }}</span>
+              <svg
+                class="w-3.5 h-3.5 text-gray-400 transition-transform duration-200"
+                :class="langOpen ? 'rotate-180' : ''"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <!-- Dropdown -->
+            <div
+              v-show="langOpen"
+              class="absolute right-0 mt-2 w-40 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 overflow-hidden"
+            >
+              <button
+                v-for="lang in languages"
+                :key="lang.code"
+                class="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors duration-150 hover:bg-primary-50"
+                :class="locale === lang.code ? 'text-primary-600 bg-primary-50' : 'text-gray-700'"
+                @click="switchLang(lang.code)"
+              >
+                <span class="text-base">{{ lang.flag }}</span>
+                <span>{{ lang.label }}</span>
+                <svg v-if="locale === lang.code" class="w-4 h-4 ml-auto text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
           <a href="#contact" class="btn-primary">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
-            Bog'lanish
+            {{ t('nav.cta') }}
           </a>
         </div>
 
-        <!-- Mobile Hamburger -->
-        <button
-          class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          @click="mobileOpen = !mobileOpen"
-          aria-label="Menu"
-        >
-          <div class="w-6 flex flex-col gap-1.5 transition-all">
-            <span
-              class="h-0.5 bg-gray-700 rounded transition-all duration-300"
-              :class="mobileOpen ? 'rotate-45 translate-y-2' : ''"
-            ></span>
-            <span
-              class="h-0.5 bg-gray-700 rounded transition-all duration-300"
-              :class="mobileOpen ? 'opacity-0' : ''"
-            ></span>
-            <span
-              class="h-0.5 bg-gray-700 rounded transition-all duration-300"
-              :class="mobileOpen ? '-rotate-45 -translate-y-2' : ''"
-            ></span>
+        <!-- Mobile: lang + hamburger -->
+        <div class="md:hidden flex items-center gap-2">
+          <!-- Mini lang switcher -->
+          <div class="relative" ref="mobileLangRef">
+            <button
+              class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-sm font-semibold text-gray-700"
+              @click="mobileLangOpen = !mobileLangOpen"
+            >
+              <span>{{ currentLang.flag }}</span>
+              <span>{{ currentLang.code.toUpperCase() }}</span>
+            </button>
+            <div
+              v-show="mobileLangOpen"
+              class="absolute right-0 mt-1 w-36 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5"
+            >
+              <button
+                v-for="lang in languages"
+                :key="lang.code"
+                class="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium hover:bg-primary-50 transition-colors"
+                :class="locale === lang.code ? 'text-primary-600' : 'text-gray-700'"
+                @click="switchLang(lang.code); mobileLangOpen = false"
+              >
+                <span>{{ lang.flag }}</span>
+                <span>{{ lang.label }}</span>
+              </button>
+            </div>
           </div>
-        </button>
+
+          <button
+            class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            @click="mobileOpen = !mobileOpen"
+            aria-label="Menu"
+          >
+            <div class="w-6 flex flex-col gap-1.5">
+              <span
+                class="h-0.5 bg-gray-700 rounded transition-all duration-300"
+                :class="mobileOpen ? 'rotate-45 translate-y-2' : ''"
+              ></span>
+              <span
+                class="h-0.5 bg-gray-700 rounded transition-all duration-300"
+                :class="mobileOpen ? 'opacity-0' : ''"
+              ></span>
+              <span
+                class="h-0.5 bg-gray-700 rounded transition-all duration-300"
+                :class="mobileOpen ? '-rotate-45 -translate-y-2' : ''"
+              ></span>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -68,15 +134,15 @@
       <div class="container-max px-4 py-4 flex flex-col gap-2">
         <a
           v-for="link in navLinks"
-          :key="link.href"
+          :key="link.key"
           :href="link.href"
           class="text-gray-700 hover:text-primary-600 font-medium py-3 px-4 rounded-xl hover:bg-primary-50 transition-colors duration-200"
           @click="mobileOpen = false"
         >
-          {{ link.label }}
+          {{ t(`nav.${link.key}`) }}
         </a>
         <a href="#contact" class="btn-primary mt-2 justify-center" @click="mobileOpen = false">
-          Bog'lanish
+          {{ t('nav.cta') }}
         </a>
       </div>
     </div>
@@ -84,23 +150,55 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)
+const langOpen = ref(false)
+const mobileLangOpen = ref(false)
+const langDropdownRef = ref(null)
+const mobileLangRef = ref(null)
 
-const navLinks = [
-  { href: '#services', label: 'Xizmatlar' },
-  { href: '#about', label: 'Haqimizda' },
-  { href: '#portfolio', label: 'Portfolio' },
-  { href: '#team', label: 'Jamoa' },
-  { href: '#contact', label: 'Aloqa' },
+const languages = [
+  { code: 'uz', label: "O'zbek", flag: '🇺🇿' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
 ]
 
-const handleScroll = () => {
+const currentLang = computed(() => languages.find(l => l.code === locale.value) || languages[0])
+
+const navLinks = [
+  { key: 'services', href: '#services' },
+  { key: 'about', href: '#about' },
+  { key: 'portfolio', href: '#portfolio' },
+  { key: 'team', href: '#team' },
+  { key: 'contact', href: '#contact' },
+]
+
+function switchLang(code) {
+  locale.value = code
+  localStorage.setItem('locale', code)
+  langOpen.value = false
+}
+
+function handleScroll() {
   scrolled.value = window.scrollY > 50
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll))
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+function handleClickOutside(e) {
+  if (langDropdownRef.value && !langDropdownRef.value.contains(e.target)) langOpen.value = false
+  if (mobileLangRef.value && !mobileLangRef.value.contains(e.target)) mobileLangOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  document.addEventListener('click', handleClickOutside)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
