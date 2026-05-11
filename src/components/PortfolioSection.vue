@@ -1,14 +1,14 @@
 <template>
-  <section id="portfolio" class="section-padding bg-white">
+  <section id="portfolio" class="section-padding bg-white dark:bg-gray-950">
     <div class="container-max">
       <div class="text-center mb-12 reveal">
-        <span class="inline-block bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+        <span class="inline-block bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-semibold mb-4">
           {{ t('portfolio.badge') }}
         </span>
-        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
           {{ t('portfolio.title1') }} <span class="gradient-text">{{ t('portfolio.title2') }}</span>
         </h2>
-        <p class="text-xl text-gray-500 max-w-2xl mx-auto">{{ t('portfolio.subtitle') }}</p>
+        <p class="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">{{ t('portfolio.subtitle') }}</p>
       </div>
 
       <!-- Filter tabs -->
@@ -18,8 +18,8 @@
           :key="tab"
           class="px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-200"
           :class="activeTabIndex === i
-            ? 'bg-primary-600 text-white shadow-lg shadow-primary-200'
-            : 'bg-gray-100 text-gray-600 hover:bg-primary-100 hover:text-primary-600'"
+            ? 'bg-primary-600 text-white shadow-lg shadow-primary-200 dark:shadow-primary-900/40'
+            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400'"
           @click="activeTabIndex = i"
         >
           {{ t(`portfolio.tabs[${i}]`) }}
@@ -30,8 +30,8 @@
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div
           v-for="(project, index) in filteredProjects"
-          :key="project.titleKey"
-          class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm card-hover reveal"
+          :key="project.index"
+          class="group bg-white dark:bg-gray-800/60 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700/60 shadow-sm card-hover reveal"
           :style="`animation-delay: ${index * 0.1}s`"
         >
           <div class="h-56 relative overflow-hidden" :class="project.bgGradient">
@@ -61,15 +61,15 @@
           </div>
 
           <div class="p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
               {{ t(`portfolio.projects[${project.index}].title`) }}
             </h3>
-            <p class="text-gray-500 text-sm leading-relaxed mb-4">
+            <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
               {{ t(`portfolio.projects[${project.index}].description`) }}
             </p>
             <div class="flex flex-wrap gap-2">
               <span v-for="tech in project.techs" :key="tech"
-                class="text-xs font-medium px-2.5 py-1 rounded-lg bg-primary-50 text-primary-600">
+                class="text-xs font-medium px-2.5 py-1 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
                 {{ tech }}
               </span>
             </div>
@@ -78,7 +78,7 @@
       </div>
 
       <div class="text-center mt-12 reveal">
-        <a href="#contact" class="btn-secondary text-base px-8 py-4">
+        <a href="#contact" class="btn-secondary dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/30 text-base px-8 py-4">
           {{ t('portfolio.cta') }}
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
